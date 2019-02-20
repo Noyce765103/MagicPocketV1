@@ -34,12 +34,13 @@ import java.util.ArrayList;
  * 分析界面,配置文件为fragment_statistics.xml
  */
 public class StatisticsFragment extends Fragment {
-
+    public View myView;
     public LineChart lineChart;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_statistics,null);
+        myView = view;
         initViews(view);
         return view;
 
@@ -49,9 +50,9 @@ public class StatisticsFragment extends Fragment {
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
         if(lineChart!=null){
-            Log.d("StatisticsFragment","refresh");
-            lineChart.notifyDataSetChanged();
-            lineChart.invalidate();
+            initViews(myView);
+            //lineChart.notifyDataSetChanged();
+            //lineChart.invalidate();
 
         }
     }
@@ -73,11 +74,12 @@ public class StatisticsFragment extends Fragment {
 
 
 
+
         ArrayList<Double> accountDetail = GlobalUtil.getInstance().getSevenDayData(GlobalUtil.getInstance().dataBaseHelper.getWeekDate());
         ArrayList<Entry> valsY = new ArrayList<Entry>();
-        if(accountDetail.size() == 0){
-            lineChart.setData(new LineData());
-            lineChart.invalidate();
+            if(accountDetail.size() == 0){
+                lineChart.setData(new LineData());
+                lineChart.invalidate();
         }else if(accountDetail.size() > 0 && accountDetail.size() < 7){
             for(int i = 0;i<accountDetail.size();i++){
                 float y_Data = (float) (accountDetail.get(i).doubleValue());
